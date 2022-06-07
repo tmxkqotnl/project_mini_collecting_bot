@@ -1,0 +1,7 @@
+triarchy_env_vars
+triarchy_env_vars/**
+.env
+__pycache__
+__pycache__/**
+temp_repo
+temp_repo/**
