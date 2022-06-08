@@ -21,5 +21,7 @@ HRD_INSTITUTION_INFO_BASE_URL = (
 )
 
 HEADERS = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.63 Safari/537.36"
-    }
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.63 Safari/537.36"
+}
+
+REVIEW_BASE_URL = "https://www.hrd.go.kr/hrdp/co/pcobo/selectSatisfactionAjax_B.do"
