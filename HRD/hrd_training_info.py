@@ -1,7 +1,7 @@
-from typing import Union
+from typing import Optional, Union
 from bs4 import BeautifulSoup
 from bs4.element import Tag, NavigableString
-from common.const import REVIEW_BASE_URL
+from common.const import HRD_TRAINING_INFO_BASE_URL, REVIEW_BASE_URL
 from common.libs import request_get
 import json
 import re
@@ -14,8 +14,29 @@ import re
 # pageId # 훈련과정 정보 - #undefined, 훈련기관 정보 None(비어있음)
 #################################################################################
 
+# fix - 함수 통합, 함수명 변경
+def get_traininig_info_all(
+    opt: dict[str, str]
+) -> dict[str, Union[str, dict[str, str], dict[str, Union[str, list[str]]]]]:
+    html = request_get(opt, HRD_TRAINING_INFO_BASE_URL, parse_to="html")
+
+    mean_review_point = get_mean_review_point(html)
+    traininig_introdcution = get_training_introduction(html)
+    info_box = get_info_list(html)
+    reviews = get_reviews(html)
+
+    return {
+        "is_recruiting": get_training_is_recruiting(html),
+        "mean_point": mean_review_point,
+        "notice": info_box["notice"],
+        "ncs_degree": info_box["ncs_degree"],
+        "introduction": traininig_introdcution,
+        "review": reviews,
+    }
+
+
 # 모집여부
-def get_training_is_recruiting(html: BeautifulSoup) -> bool:
+def get_training_is_recruiting(html: BeautifulSoup) -> str:
     statusTag = (
         html.find("section", {"id": "section1"})
         .find("div", {"class": "info"})
@@ -26,13 +47,13 @@ def get_training_is_recruiting(html: BeautifulSoup) -> bool:
 
     status = statusTag.get_attribute_list("class")[1]
     if status == "orange":
-        return True
+        return "1"
     else:
-        return False
+        return "0"
 
 
 # 훈련과정 정보 첫 번째 박스
-def get_info_list(html: BeautifulSoup) -> str:
+def get_info_list(html: BeautifulSoup) -> dict[str, str]:
     infoList = (
         html.find("section", {"id": "section1"})
         .find("div", {"class": "infoList"})
@@ -82,7 +103,7 @@ def get_reviews(html: BeautifulSoup) -> dict[str, Union[str, list[str]]]:
     for i in range(1, max_degree + 1):
         opt["srchTracseTme"] = i
         review_json = json.loads(
-            request_get(opt, REVIEW_BASE_URL, parse_to_html=False).text
+            request_get(opt, REVIEW_BASE_URL, parse_to="html").text
         )
 
         a_review = {
@@ -123,21 +144,3 @@ def get_training_introduction(html: BeautifulSoup) -> dict[str, str]:
     # to dict
     parsed = {th: td for th, td in zip(stripped_ths, tds_processed)}
     return parsed
-
-
-# fix - 함수 통합, 함수명 변경
-def get_traininig_info_all(
-    html: BeautifulSoup,
-) -> dict[str, Union[str, dict[str, str]]]:
-    notice = get_notice(html)
-    mean_review_point = get_mean_review_point(html)
-    traininig_introdcution = get_training_introduction(html)
-
-    # final form
-    form = {
-        "point": mean_review_point,
-        "notice": notice,
-        "introduction": traininig_introdcution,
-    }
-
-    return form
