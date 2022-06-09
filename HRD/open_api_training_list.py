@@ -46,8 +46,6 @@ def get_training_list(opt: dict[str, str], info_type: str = "job_hunter"):
     if type(opt) is not dict:
         raise TypeError("opt must be dict][str,str]")
 
-    opt["authKey"] = getenv("HRD_API_KEY")
-
     url = get_hrd_url("LIST", info_type)
     xml_res = request_api_response(opt, url)
 
@@ -56,7 +54,7 @@ def get_training_list(opt: dict[str, str], info_type: str = "job_hunter"):
 
 # 구직자 과정을 제외한 나머지 두 개 과정은
 # eiEmplCnt3, eiEmplCnt3Gt10, eiEmplRate3, eiEmplRate6
-# 총 4개 컬럼이 존재하지 않습니다.
+# 총 4개 컬럼이 존재하지 않습니다. => None
 def parse_training_list(xml: BeautifulSoup) -> pd.DataFrame:
     scn_list = xml.find_all("scn_list")
 
