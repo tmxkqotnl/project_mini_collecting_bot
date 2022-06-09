@@ -1,7 +1,8 @@
 from typing import Union
 from bs4 import BeautifulSoup
 from bs4.element import Tag, NavigableString
-from common.const import HRD_ROOT_URL
+from common.const import HRD_INSTITUTION_INFO_BASE_URL, HRD_ROOT_URL
+from common.libs import request_get
 
 #################################################################################
 # tracseId=AIG20210000328968 # 훈련과정ID
@@ -10,9 +11,17 @@ from common.const import HRD_ROOT_URL
 # trainstCstmrId=500020054508 # 훈련기관ID
 # pageId # 훈련과정 정보 - #undefined, 훈련기관 정보 None(비어있음)
 #################################################################################
-def get_institution_info_all(opt: dict[str, str]):
 
-    return None
+def get_institution_info_all(
+    opt: dict[str, str]
+) -> dict[str, Union[str, list[str], dict[str, Union[str, list[dict[str, str]]]]]]:
+    html = request_get(opt, HRD_INSTITUTION_INFO_BASE_URL, parse_to="html")
+
+    inst_desc = get_institution_description(html)
+    intro_thumb = get_thumbnail_intro(html)
+    info_detail = get_info_detail(html)
+
+    return {"description": inst_desc, "intro_thumb": intro_thumb, "detail": info_detail}
 
 
 def get_institution_description(html: BeautifulSoup) -> str:
@@ -32,7 +41,10 @@ def get_thumbnail_intro(html: BeautifulSoup) -> list[str]:
         .find_all("div", {"class": "inner"})
     )
 
-    return ["".join([HRD_ROOT_URL,i.attrs["style"].split("'")[1]]) for i in thumbnail_div_list]
+    return [
+        "".join([HRD_ROOT_URL, i.attrs["style"].split("'")[1]])
+        for i in thumbnail_div_list
+    ]
 
 
 def get_info_detail(html: BeautifulSoup) -> dict[str, Union[str, list[dict[str, str]]]]:
