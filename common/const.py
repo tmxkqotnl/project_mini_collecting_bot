@@ -1,3 +1,4 @@
+HRD_ROOT_URL = "https://www.hrd.go.kr"
 HRD_OPEN_API_URLS = {
     "LIST": {
         "job_hunter": "https://www.hrd.go.kr/jsp/HRDP/HRDPO00/HRDPOA60/HRDPOA60_1.jsp",
@@ -25,3 +26,6 @@ HEADERS = {
 }
 
 REVIEW_BASE_URL = "https://www.hrd.go.kr/hrdp/co/pcobo/selectSatisfactionAjax_B.do"
+
+INSTITUTION_SEARCH_DETAIL = ["default", "facility_detail", "eqnm_detail"]
+TRAINING_TYPE = ["job_hunter", "worker", "enterprise"]
