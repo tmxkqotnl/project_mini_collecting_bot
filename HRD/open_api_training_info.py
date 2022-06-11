@@ -1,11 +1,9 @@
-from os import getenv
-
 import pandas as pd
 
 from bs4 import BeautifulSoup
 import lxml
 
-from HRD.api_process import get_hrd_url, request_api_response
+from HRD.api_libs import get_hrd_url, request_api_response
 
 ########################################################################
 ## API 훈련과정 목록 요청 파라미터

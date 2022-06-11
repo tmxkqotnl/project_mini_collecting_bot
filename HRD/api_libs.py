@@ -1,22 +1,16 @@
 from os import getenv
-from requests import Response, get, HTTPError, RequestException
-from bs4 import BeautifulSoup
-import lxml
 from common.const import (
-    HEADERS,
     HRD_OPEN_API_URLS,
     INSTITUTION_SEARCH_DETAIL,
     TRAINING_TYPE,
 )
 from common.libs import request_get
 
-from common.url import URL
-
 
 def request_api_response(opt: dict[str, str], base_url: str):
     opt["authKey"] = getenv("HRD_API_KEY")
 
-    return request_get(opt,base_url,parse_to='xml')
+    return request_get(opt, base_url, parse_to="xml")
 
 
 def dict_has_key(d: dict[str, str], key: str):

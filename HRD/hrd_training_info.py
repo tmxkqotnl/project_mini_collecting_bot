@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Union
 from bs4 import BeautifulSoup
 from bs4.element import Tag, NavigableString
 from common.const import HRD_TRAINING_INFO_BASE_URL, REVIEW_BASE_URL

@@ -1,9 +1,7 @@
-from os import getenv
 from typing import Any, Optional
 from bs4 import BeautifulSoup
 
-import pandas as pd
-from HRD.api_process import (
+from HRD.api_libs import (
     check_info_detail_type,
     check_info_type,
     get_hrd_url,
