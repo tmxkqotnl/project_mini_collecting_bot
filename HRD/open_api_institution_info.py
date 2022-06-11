@@ -69,7 +69,7 @@ def get_institution_info(
 
     func = func_type(info_detail)
 
-    return pd.DataFrame(func(xml_res))
+    return func(xml_res)
 
 
 def parse_institution_info(xml: BeautifulSoup) -> list[dict[str, Optional[str]]]:
