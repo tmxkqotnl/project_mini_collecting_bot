@@ -1,6 +1,5 @@
 from typing import Union
 from bs4 import BeautifulSoup
-from bs4.element import Tag, NavigableString
 from common.const import HRD_INSTITUTION_INFO_BASE_URL, HRD_ROOT_URL
 from common.libs import request_get
 
@@ -11,6 +10,7 @@ from common.libs import request_get
 # trainstCstmrId=500020054508 # 훈련기관ID
 # pageId # 훈련과정 정보 - #undefined, 훈련기관 정보 None(비어있음)
 #################################################################################
+
 
 def get_institution_info_all(
     opt: dict[str, str]
