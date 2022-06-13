@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Optional, Union
 from bs4 import BeautifulSoup
 from common.const import HRD_INSTITUTION_INFO_BASE_URL, HRD_ROOT_URL
 from common.libs import request_get
@@ -14,7 +14,7 @@ from common.libs import request_get
 
 def get_institution_info_all(
     opt: dict[str, str]
-) -> dict[str, Union[str, list[str], dict[str, Union[str, list[dict[str, str]]]]]]:
+) -> dict[str, Union[None, str, list[str], dict[str, Union[str, dict[str, str]]]]]:
     html = request_get(opt, HRD_INSTITUTION_INFO_BASE_URL, parse_to="html")
 
     inst_desc = get_institution_description(html)
@@ -24,30 +24,33 @@ def get_institution_info_all(
     return {"description": inst_desc, "intro_thumb": intro_thumb, "detail": info_detail}
 
 
-def get_institution_description(html: BeautifulSoup) -> str:
-    return (
+def get_institution_description(html: BeautifulSoup) -> Optional[str]:
+    desc = (
         html.find("section", {"id": "section2"})
         .find("div", {"class": "addExplainBoxArea"})
         .find("pre")
         .text
     )
+    return desc if desc != "등록된 정보가 없습니다." else None
 
 
 def get_thumbnail_intro(html: BeautifulSoup) -> list[str]:
-    thumbnail_div_list = (
-        html.find("section", {"id": "section2"})
-        .find("div", {"class": "thumbnailIntroListArea"})
-        .find("ul", {"class": "list swiper-wrapper"})
-        .find_all("div", {"class": "inner"})
+    thumbnail_div = html.find("section", {"id": "section2"}).find(
+        "div", {"class": "thumbnailIntroListArea"}
     )
+    if thumbnail_div:
+        thumbnail_div_list = thumbnail_div.find(
+            "ul", {"class": "list swiper-wrapper"}
+        ).find_all("div", {"class": "inner"})
+        return [
+            "".join([HRD_ROOT_URL, i.attrs["style"].split("'")[1]])
+            for i in thumbnail_div_list
+        ]
+    else:
+        return []
 
-    return [
-        "".join([HRD_ROOT_URL, i.attrs["style"].split("'")[1]])
-        for i in thumbnail_div_list
-    ]
 
-
-def get_info_detail(html: BeautifulSoup) -> dict[str, Union[str, list[dict[str, str]]]]:
+def get_info_detail(html: BeautifulSoup) -> dict[str, Union[str, dict[str, str]]]:
     section2_info = (
         html.find("section", {"id": "section2"})
         .find("div", {"class": "infoDetailBox"})
@@ -67,12 +70,12 @@ def get_info_detail(html: BeautifulSoup) -> dict[str, Union[str, list[dict[str, 
         .find_all("li")
     )
 
-    info_list_dict = []
+    info_list_dict = {}
     for i in info_list:
         tit = i.find("span", {"class": "tit"}).text.strip()
         con = i.find("span", {"class": "con"}).text.strip()
 
-        info_list_dict.append({tit: con})
+        info_list_dict[tit] = con
 
     return {"info_detail": info_list_dict, "thumbnail": institution_thumbnail_src}
     # infoList = filter(lambda x: type(x) is not str, infoList)

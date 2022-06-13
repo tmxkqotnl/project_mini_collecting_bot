@@ -106,11 +106,12 @@ def get_reviews(html: BeautifulSoup) -> dict[str, Union[str, list[str]]]:
             request_get(opt, REVIEW_BASE_URL, parse_to="html").text
         )
 
-        a_review = {
-            "degree": review_json["commandMap"]["srchTracseTme"],
-            "reviews": [i["pstcptCn"] for i in review_json["epilogueList"]],
-        }
-        rvs["reviews"].append(a_review)
+        if review_json["commandMap"]["srchTracseTme"] == str(i):
+            a_review = {
+                "degree": review_json["commandMap"]["srchTracseTme"],
+                "reviews": [i["pstcptCn"] for i in review_json["epilogueList"]],
+            }
+            rvs["reviews"].append(a_review)
 
     return rvs
 
