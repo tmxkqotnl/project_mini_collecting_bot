@@ -3,7 +3,7 @@ from sys import path
 import sys
 from dotenv import load_dotenv
 from os.path import abspath, join, dirname
-
+import json
 
 project_path = dirname(abspath(__file__))
 env_file_path = join(project_path, ".env")
@@ -36,12 +36,14 @@ params = {
 }
 
 
-def get_all_from_2018(info_type: str):
-    from os.path import abspath,dirname,join
-    with open(join(dirname(abspath(__file__)),"date_range.json"), "r+") as f:
-        import json
+def get_date_range():
+    with open(join(dirname(abspath(__file__)), "date_range.json"), "r+") as f:
+        return json.load(f)
 
-        d = json.load(f)
+
+def get_all_from_2018(info_type: str):
+    d = get_date_range()
+
     for i in d.keys():
         for j in d[i].keys():
             for k in range(int(d[i][j]["first"]), int(d[i][j]["last"])):
