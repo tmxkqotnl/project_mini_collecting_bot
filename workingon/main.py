@@ -37,7 +37,7 @@ params = {
 
 
 def get_all_from_2018(info_type: str):
-    with open("date_range.json", "r+") as f:
+    with open("/crawler/date_range.json", "r+") as f:
         import json
 
         d = json.load(f)

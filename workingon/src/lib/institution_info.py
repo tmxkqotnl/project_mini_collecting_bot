@@ -6,6 +6,7 @@ import requests
 from src.common.const import INSTITUTION_SEARCH_DETAIL, HRD_OPEN_API_URLS
 from src.common.common import error_handler
 
+
 @error_handler
 def get_institution_info_all(
     params: dict[str, str] = {
@@ -27,6 +28,8 @@ def get_institution_info_all(
                 "&".join(["{}={}".format(k, v) for k, v in params.items()]),
             ]
         )
+
+        res = requests.get(url)
         # if wrong response got
         if res.status_code != 200:
             raise requests.HTTPError(

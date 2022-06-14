@@ -12,7 +12,7 @@ def error_handler(func):
             file_path = dirname(dirname(dirname(abspath(__file__))))
 
             with open(
-                join(file_path, "error_logging.json"), "a+", encoding="utf-8"
+                join(file_path, "/crawlererror_logging.json"), "a+", encoding="utf-8"
             ) as f:
                 f.write(
                     json.dumps(

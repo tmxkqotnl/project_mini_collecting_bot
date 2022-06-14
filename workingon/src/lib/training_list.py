@@ -91,11 +91,11 @@ def get_training_list(
         )
 
     # get parsed item
-    result = [parse_training_html(i) for i in scn_list]
+    result = [parse_training_html(i, info_type) for i in scn_list]
     return list(filter(lambda x: x["inst_code"] is not None, result))
 
 
-def parse_training_html(html: BeautifulSoup):
+def parse_training_html(html: BeautifulSoup, info_type: str):
     address = html.find("address").text.split() if html.find("address") else None
     if address is not None:
         try:  # "세종" 때문
@@ -169,4 +169,5 @@ def parse_training_html(html: BeautifulSoup):
         "inst_code": trainstCstId.text if trainstCstId is not None else None,
         "degree": trprDegr.text if trprDegr is not None else None,
         "tr_id": trprId.text if trprId is not None else None,
+        "info_type": info_type,
     }

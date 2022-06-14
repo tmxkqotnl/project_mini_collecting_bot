@@ -1,7 +1,9 @@
-from sqlalchemy import CHAR, DATE, INTEGER, TEXT, VARCHAR, NUMERIC, Column
+from sqlalchemy import CHAR, DATE, INTEGER, TEXT, TIMESTAMP, VARCHAR, NUMERIC, Column
 from src.db.db import Base
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.sql import func
+
 
 # fix - tel_no type
 class Training(Base):
@@ -40,4 +42,7 @@ class Training(Base):
     inst_code = Column(TEXT())  # 훈련기관_코드
     inst_id = Column(TEXT())  # 훈련기관ID
 
-    degree = Column(INTEGER())  # 훈련과정_순차(회차)
+    degree = Column(TEXT())  # 훈련과정_순차(회차)
+
+    info_type = Column(TEXT())
+    created_at = Column(TIMESTAMP(), default=func.now())
