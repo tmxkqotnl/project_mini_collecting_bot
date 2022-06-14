@@ -1,7 +1,7 @@
 from typing import Union
 from bs4 import BeautifulSoup
 from bs4.element import Tag, NavigableString
-from common.const import HRD_TRAINING_INFO_BASE_URL, REVIEW_BASE_URL
+from workingon.src.common.const import HRD_TRAINING_INFO_BASE_URL, REVIEW_BASE_URL
 from common.libs import request_get
 import json
 import re
@@ -72,6 +72,7 @@ def get_info_list(html: BeautifulSoup) -> dict[str, str]:
 
     # NCS 수준 - 리스트 네 번째
     NCS_contents = infoList[3].find("span", {"class": "con"}).contents[0]
+
     NCS_num = NCS_contents.strip()[0]
 
     return {"notice": remove_len_is_zero, "ncs_degree": NCS_num}

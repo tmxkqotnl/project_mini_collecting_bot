@@ -5,3 +5,9 @@ __pycache__
 __pycache__/**
 temp_repo
 temp_repo/**
+
+check.json
+logging.txt
+
+pgdata
+pgdata/*

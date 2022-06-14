@@ -7,6 +7,23 @@ from src.common.const import INSTITUTION_SEARCH_DETAIL, HRD_OPEN_API_URLS
 from src.common.common import error_handler
 
 
+########################################################################
+## 과정/기관정보 요청 파라미터
+# 모든 옵션은 필수 사항입니다.
+# api 반환값은 srchTorgId가 default 옵션일 때의 반환값을 모두 포함합니다.
+
+# opt = {
+#         'authKey':API_KEY, # API Auth key
+#         'returnType':'XML', # only XML available
+#         'outType':'2', # detail - 고정
+#         'srchTrprId':None, # 훈련과정 ID
+#         'srchTrprDegr':None, # 훈련과정 회차 # 없으면 함수가 제대로 돌아가지 않음..
+# }
+
+#         'srchTorgId':'default', # default - 기본 정보 + 세부 정보 , facility_detail - 시설 정보, eqnm_detail - 장비 정보
+########################################################################
+
+
 @error_handler
 def get_institution_info_all(
     params: dict[str, str] = {

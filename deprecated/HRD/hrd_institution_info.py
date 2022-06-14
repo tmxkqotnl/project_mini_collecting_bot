@@ -1,6 +1,6 @@
 from typing import Optional, Union
 from bs4 import BeautifulSoup
-from common.const import HRD_INSTITUTION_INFO_BASE_URL, HRD_ROOT_URL
+from workingon.src.common.const import HRD_INSTITUTION_INFO_BASE_URL, HRD_ROOT_URL
 from common.libs import request_get
 
 #################################################################################
@@ -58,10 +58,10 @@ def get_info_detail(html: BeautifulSoup) -> dict[str, Union[str, dict[str, str]]
     )
 
     # img src
-    institution_img = (
-        section2_info.find("div", {"class": "thumbnail"}).find("img").attrs["src"]
+    institution_img = section2_info.find("div", {"class": "thumbnail"}).find("img")
+    institution_thumbnail_src = (
+        "".join([HRD_ROOT_URL, institution_img.attrs["src"]]) if institution_img else ""
     )
-    institution_thumbnail_src = "".join([HRD_ROOT_URL, institution_img])
 
     # info_list
     info_list = (

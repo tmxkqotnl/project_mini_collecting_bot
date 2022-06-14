@@ -1,5 +1,5 @@
 from os import getenv
-from common.const import (
+from workingon.src.common.const import (
     HRD_OPEN_API_URLS,
     INSTITUTION_SEARCH_DETAIL,
     TRAINING_TYPE,

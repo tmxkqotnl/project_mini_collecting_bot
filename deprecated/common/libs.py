@@ -2,7 +2,7 @@
 from typing import Any, Union
 from bs4 import BeautifulSoup
 import requests
-from common.const import (
+from workingon.src.common.const import (
     HEADERS,
     HRD_TRAINING_INFO_BASE_URL,
 )

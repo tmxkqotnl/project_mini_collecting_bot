@@ -7,7 +7,7 @@ from HRD.api_libs import (
     get_hrd_url,
     request_api_response,
 )
-from common.const import INSTITUTION_SEARCH_DETAIL
+from workingon.src.common.const import INSTITUTION_SEARCH_DETAIL
 from common.libs import check_type
 
 ########################################################################

@@ -37,7 +37,8 @@ params = {
 
 
 def get_all_from_2018(info_type: str):
-    with open("/crawler/date_range.json", "r+") as f:
+    from os.path import abspath,dirname,join
+    with open(join(dirname(abspath(__file__)),"date_range.json"), "r+") as f:
         import json
 
         d = json.load(f)
