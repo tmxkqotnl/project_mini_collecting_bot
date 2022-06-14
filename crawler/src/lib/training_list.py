@@ -1,5 +1,5 @@
 from os import getenv
-from typing import Optional
+from typing import Optional, Union
 
 from bs4 import BeautifulSoup
 import requests
@@ -64,7 +64,7 @@ def get_training_list(
         ]
     )
 
-    res = requests.get(url)
+    res = requests.get(url)  # can raise HTTP error
 
     # if wrong response got
     if res.status_code != 200:
@@ -92,10 +92,14 @@ def get_training_list(
 
     # get parsed item
     result = [parse_training_html(i, info_type) for i in scn_list]
-    return list(filter(lambda x: x["inst_code"] is not None, result))
+    return list(
+        filter(lambda x: x["inst_code"] is not None and x["inst_code"] != "", result)
+    )
 
 
-def parse_training_html(html: BeautifulSoup, info_type: str):
+def parse_training_html(
+    html: BeautifulSoup, info_type: str
+) -> dict[str, Optional[Union[str, list[str]]]]:
     address = html.find("address").text.split() if html.find("address") else None
     if address is not None:
         try:  # "세종" 때문

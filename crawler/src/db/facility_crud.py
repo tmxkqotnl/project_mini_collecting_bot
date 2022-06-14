@@ -1,6 +1,5 @@
-from math import factorial
 from typing import Optional
-
+from sqlalchemy.orm.exc import NoResultFound
 from src.db.db import Session
 from src.models.facility import Facility
 from src.common.common import error_handler
@@ -8,8 +7,8 @@ from src.common.common import error_handler
 
 @error_handler
 def insert_facility(facility: dict[str, Optional[str]]):
+    # 테스트 후 삭제
     if facility["inst_code"] is None:
-        # logging
         raise ValueError("자료 부족 facility")
 
     for k, v in facility.items():
@@ -18,14 +17,19 @@ def insert_facility(facility: dict[str, Optional[str]]):
 
     with Session() as session:
         new_tr = Facility(**facility)
-        fs = (
-            session.query(Facility)
-            .filter(
-                Facility.name == facility["name"],
-                Facility.inst_code == facility["inst_code"],
+        try:
+            fs = (
+                session.query(Facility)
+                .filter(
+                    Facility.name == facility["name"],
+                    Facility.inst_code == facility["inst_code"],
+                    Facility.tr_id == facility["tr_id"],
+                    Facility.degree == facility["degree"],
+                )
+                .one()
             )
-            .all()
-        )
-        if len(fs) == 0:
+            session.query(Facility).filter(Facility.id == fs.id).update(facility)
+        except NoResultFound:
             session.add(new_tr)
+
         session.commit()

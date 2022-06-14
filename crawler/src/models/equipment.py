@@ -11,3 +11,4 @@ class Equipment(Base):
     tr_id = Column(TEXT())
     name = Column(TEXT())  # fix
     quantity = Column(TEXT())  # fix
+    degree = Column(TEXT())

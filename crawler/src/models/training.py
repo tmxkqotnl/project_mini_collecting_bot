@@ -1,4 +1,4 @@
-from sqlalchemy import CHAR, DATE, INTEGER, TEXT, TIMESTAMP, VARCHAR, NUMERIC, Column
+from sqlalchemy import TEXT, TIMESTAMP, Column
 from src.db.db import Base
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
@@ -9,6 +9,7 @@ from sqlalchemy.sql import func
 class Training(Base):
     __tablename__ = "training_item"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+
     tr_id = Column(TEXT())  # 훈련과정ID
     base_adrs = Column(TEXT())  # 시도군주소
     base_adrs_sub = Column(TEXT())  # 시군구주소

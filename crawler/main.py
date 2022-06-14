@@ -43,6 +43,22 @@ def get_date_range():
 
 def get_all_from_2018(info_type: str):
     d = get_date_range()
+    api_key = getenv("HRD_API_KEY")
+
+    params = {
+        "authKey": api_key,
+        "returnType": "XML",
+        "outType": "1",
+        "pageSize": "10",
+        "sort": "ASC",
+        "sortCol": "TR_STT_DT",
+    }
+
+    inst_opt = {
+        "authKey": api_key,
+        "returnType": "XML",
+        "outType": "2",
+    }
 
     for i in d.keys():
         for j in d[i].keys():
@@ -51,49 +67,40 @@ def get_all_from_2018(info_type: str):
                     [i, j, str(k) if len(str(k)) == 2 else "".join(["0", str(k)])]
                 )
 
-                params = {
-                    "authKey": getenv("HRD_API_KEY"),
-                    "returnType": "XML",
-                    "outType": "1",
-                    "pageSize": "10",
-                    "sort": "ASC",
-                    "sortCol": "TR_STT_DT",
-                    "srchTraStDt": a_day,
-                    "srchTraEndDt": a_day,
-                }
+                params["srchTraStDt"] = a_day
+                params["srchTraEndDt"] = a_day
 
                 idx = 1
                 while True:
                     params["pageNum"] = idx
+
                     lst = get_training_list(params, info_type)
                     if len(lst) == 0:
                         break
 
                     for x in lst:
-                        if x["inst_code"] == "" or x["inst_code"] is None:
-                            continue
-
                         insert_training(x)
 
-                        inst_opt = {
-                            "authKey": getenv("HRD_API_KEY"),
-                            "returnType": "XML",
-                            "outType": "2",
-                            "srchTrprId": x["tr_id"],
-                            "srchTrprDegr": x["degree"],
-                        }
+                        inst_opt["srchTrprId"] = x["tr_id"]
+                        inst_opt["srchTrprDegr"] = x["degree"]
 
                         infos = get_institution_info_all(inst_opt, info_type)
-
+                        
+                        # 기관 정보 insert
                         insert_institution(infos["default"])
+                        
+                        # 시설물 정보 insert
                         for f in infos["facility_detail"]:
                             f["inst_code"] = infos["default"]["inst_code"]
                             f["tr_id"] = infos["default"]["tr_id"]
+                            f['degree'] = infos['default']['tr_degree']
                             insert_facility(f)
 
+                        # 장비 정보 insert
                         for e in infos["eqnm_detail"]:
                             e["inst_code"] = infos["default"]["inst_code"]
                             e["tr_id"] = infos["default"]["tr_id"]
+                            e['degree'] = infos['default']['tr_degree']
                             insert_equipment(e)
                     idx = idx + 1
 

@@ -14,3 +14,4 @@ class Facility(Base):
     occupation = Column(TEXT())  # fix
     name = Column(TEXT())  # fix
     quantity = Column(TEXT())  # fix
+    degree = Column(TEXT())
