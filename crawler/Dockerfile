@@ -9,7 +9,6 @@ RUN apt update && apt install tzdata -y
 ENV TZ="Asia/Seoul"
 
 RUN apt install cron -y
-RUN apt install vim -y
 
 COPY cron /etc/cron.d/cron
 
@@ -20,3 +19,5 @@ RUN touch /var/log/cron.log
 EXPOSE 8082
 
 CMD ["cron","-f"]
+
+
